@@ -1,0 +1,41 @@
+<%- layout('../views/accounts/layout') %>
+
+
+
+<form class="form-signin" method="post">
+    <h1>
+        Welcome
+    </h1>
+    <h3>Create Account</h3>
+
+    <br>
+    <br>
+    <br>
+    <% if (errors.length > 0) { %>
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismmiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <%= errors %>
+    </div>
+    <% } %>
+    <div class="form-label-group">
+        <label for="inputEmail">Email address</label>
+        <input name="email" type="email" id="inputEmail" class="form-control" required autofocus>
+    </div>
+
+    <div class="form-label-group">
+        <label for="inputName">Username</label>
+        <input name="name" type="text" id="inputName" class="form-control" required autofocus>
+    </div>
+
+    <div class="form-label-group">
+        <label for="inputPassword">Password</label>
+        <input name="password" type="password" id="inputPassword" class="form-control" required>
+    </div>
+
+    <br>
+    <br>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+</form>
