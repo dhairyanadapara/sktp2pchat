@@ -3,7 +3,7 @@ let name;
 let connectedUser;
 
 //connecting to our signaling server
-let conn = new WebSocket('wss://localhost');
+let conn = new WebSocket('wss://192.168.0.106');
 
 //user connected by req, res to server
 conn.onopen = function () {
@@ -94,7 +94,12 @@ function handleLogin() {
         stream = myStream;
 
         //displaying local video stream on the page
-        localVideo.src = window.URL.createObjectURL(stream);
+        try {
+            localVideo.srcObject = stream;
+        }
+        catch (e) {
+            localVideo.src = window.URL.createObjectURL(stream);
+        }
 
         //using Google public stun server
         let configuration = {

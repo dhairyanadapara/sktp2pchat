@@ -221,7 +221,7 @@ function sendTo(connection, message) {
     connection.send(JSON.stringify(message));
 }
 
-server.listen(secret.port ,() => {
+server.listen(secret.port, '192.168.0.106' ,() => {
     console.log(`Server is UP`);
 });
 
