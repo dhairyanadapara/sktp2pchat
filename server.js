@@ -1,7 +1,7 @@
 //require our websocket library 
-
+const fs = require('fs');
 const express = require('express');
-const http = require('http');
+const https = require('https');
 const WebSocket = require('ws');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
@@ -16,10 +16,17 @@ const passport = require('passport');
 const util = require('util');
 
 const app = express();
+let privateKey = fs.readFileSync('./config/key.pem');
+let certificate = fs.readFileSync('./config/cert.pem');
+
+let credentials = {
+    key: privateKey,
+    cert: certificate
+}
 
 let secret = require('./config/secret');
 let User = require('./models/user');
-const server = http.createServer(app);
+const server = https.createServer(credentials, app);
 const wss = new WebSocket.Server({server});
 
 
@@ -214,7 +221,7 @@ function sendTo(connection, message) {
     connection.send(JSON.stringify(message));
 }
 
-server.listen(secret.port, () => {
+server.listen(secret.port ,() => {
     console.log(`Server is UP`);
 });
 

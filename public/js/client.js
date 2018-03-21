@@ -88,8 +88,9 @@ startBtn.addEventListener("click", function (event) {
 
 function handleLogin() {
 
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-    navigator.webkitGetUserMedia({video: true, audio: false}, function (myStream) {
+    navigator.getUserMedia({video: true, audio: false}, function (myStream) {
         stream = myStream;
 
         //displaying local video stream on the page
