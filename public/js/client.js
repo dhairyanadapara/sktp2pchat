@@ -3,7 +3,7 @@ let name;
 let connectedUser;
 
 //connecting to our signaling server
-let conn = new WebSocket('ws://localhost:3000');
+let conn = new WebSocket('wss://localhost');
 
 //user connected by req, res to server
 conn.onopen = function () {
