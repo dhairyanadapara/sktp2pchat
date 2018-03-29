@@ -26,6 +26,7 @@ let credentials = {
 
 let secret = require('./config/secret');
 let User = require('./models/user');
+let VChat = require('./models/chat');
 const server = https.createServer(credentials, app);
 const wss = new WebSocket.Server({server});
 
@@ -221,7 +222,7 @@ function sendTo(connection, message) {
     connection.send(JSON.stringify(message));
 }
 
-server.listen(secret.port, '192.168.0.106' ,() => {
+server.listen(secret.port, '192.168.0.101' ,() => {
     console.log(`Server is UP`);
 });
 
