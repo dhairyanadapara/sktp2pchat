@@ -1,4 +1,4 @@
-//require our websocket library 
+//require our websocket library
 const fs = require('fs');
 const express = require('express');
 const https = require('https');
@@ -14,6 +14,10 @@ const flash = require('express-flash');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const util = require('util');
+const hbs = require('hbs');
+const methodOverride = require('method-override');
+const path = require('path');
+
 
 const app = express();
 let privateKey = fs.readFileSync('./config/key.pem');
@@ -56,9 +60,12 @@ app.use(function (req, res, next) {
     res.locals.user = req.user;
     next();
 });
+//app.use(methodOverride('_method'));
 
-app.engine('ejs', ejsMate);
-app.set('view engine', 'ejs');
+// app.engine('ejs', ejsMate);
+// app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
 
 let data,conn,username;
 let mainRoutes = require('./routes/main');
@@ -222,7 +229,6 @@ function sendTo(connection, message) {
     connection.send(JSON.stringify(message));
 }
 
-server.listen(secret.port, '192.168.0.101' ,() => {
+server.listen(secret.port, '192.168.0.105' ,() => {
     console.log(`Server is UP`);
 });
-

@@ -6,24 +6,25 @@ let passportConf = require('../config/passport');
 router.get('/login', (req, res) => {
     if (req.user) return res.redirect('/signup');
 
-    res.render('accounts/login', {
+    res.render('accounts/signin', {
+        layout: 'login',
         message: req.flash('loginMessage')
     });
 });
 
 
 router.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/profile',
+        successRedirect: '/dashboard',
         failureRedirect: '/login',
         failureFlash: true
     })
 );
 
-router.get('/profile', (req, res, next) => {
+router.get('/dashboard', (req, res, next) => {
     User.findOne({_id: req.user._id}, function (err, user) {
         if (err) return next(err);
 
-        res.render('accounts/profile', {user: user});
+        res.render('accounts/dashboard', {user: user});
     });
 
     //res.render('/accounts/login');
@@ -31,7 +32,7 @@ router.get('/profile', (req, res, next) => {
 
 router.get('/signup', (req, res, next) => {
     res.render('accounts/signup', {
-        errors: req.flash('errors')
+        layout:'login'
     });
 });
 
@@ -52,7 +53,7 @@ router.post('/signup', (req, res, next) => {
             user.save((err) => {
                 if (err) return next(err);
 
-                return res.redirect('/profile');
+                return res.redirect('/dashboard');
             });
         }
     });

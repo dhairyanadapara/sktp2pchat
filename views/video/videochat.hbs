@@ -1,0 +1,88 @@
+<p id="contacts" xmlns="http://www.w3.org/1999/html"></p>
+<div id="callPage" class="call-page">
+    <video id="localVideo" autoplay></video>
+    <video id="remoteVideo" autoplay></video>
+
+    <div class="row text-center">
+        <div class="col-md-12">
+            <button id="startBtn" class="btn-success btn">Start</button>
+            <form id="newCall" method="POST">
+                <input id="callToUsernameInput" type="text" name="receiver" placeholder="username to call" required/>
+                <input type="submit" value="call" id="callBtn" class="btn-success btn" />
+            </form>
+            <form method="POST" action="/endvideo?_method=PATCH">
+                <input type="submit" value="hangup" id="hangUpBtn" class="btn-danger btn" />
+            </form>
+        </div>
+    </div>
+</div>
+<h2>Call Logs</h2>
+<h3>Dialed</h3>
+<div class="table-responsive">
+
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>receiver</th>
+                <th>Date</th>
+                <th>startTime</th>
+                <th>endTime</th>
+            </tr>
+        </thead>
+        {{#each calls}}
+        <span data-feather="calls">
+            <tbody>
+                <tr>
+                    <td>
+                        {{rname}}
+                    </td>
+                    <td>
+                        {{date}}
+                    </td>
+                    <td>
+                        {{startTime}}
+                    </td>
+                    <td>
+                        {{endTime}}
+                    </td>
+                </tr>
+            </tbody>
+        </span>
+        {{/each}}
+    </table>
+</div>
+<h3>Received</h3>
+<div class="table-responsive">
+
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>caller</th>
+                <th>Date</th>
+                <th>startTime</th>
+                <th>endTime</th>
+            </tr>
+        </thead>
+        {{#each recv}}
+        <span data-feather="calls">
+            <tbody>
+                <tr>
+                    <td>
+                        {{cname}}
+                    </td>
+                    <td>
+                        {{date}}
+                    </td>
+                    <td>
+                        {{startTime}}
+                    </td>
+                    <td>
+                        {{endTime}}
+                    </td>
+                </tr>
+            </tbody>
+        </span>
+        {{/each}}
+    </table>
+</div>
+<script src="js/client.js"></script>
