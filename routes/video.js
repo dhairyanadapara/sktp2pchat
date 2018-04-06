@@ -33,19 +33,19 @@ router.post('/video', function (req, res, next) {
     }
 
     let caller, receive;
-
+    console.log(req.user);
     User.findOne({ _id: req.user._id }, function (err, user) {
         if (err) return next(err);
 
-
+        
         caller = user._id;
         vchat.cname = user.profile.name;
         vchat.cid = caller;
     });
 
-    User.findOne({ 'profile.name': req.body.receiver }, function (err, user) {
+    User.findOne({ 'profile.name': req.body.name }, function (err, user) {
         if (err) return next(err);
-
+        console.log(user);
         receive = user._id;
         vchat.rname = user.profile.name;
         vchat.rid = receive;
