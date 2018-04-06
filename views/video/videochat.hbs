@@ -89,11 +89,9 @@
 <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        // Listen to submit event on the <form> itself!
         $('#newCall').submit(function (e) {
 
             e.preventDefault();
-            //e.stopPropagation();
 
             var name = $("#callToUsernameInput").val();
 

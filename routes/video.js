@@ -21,7 +21,6 @@ router.get('/video', (req, res, next) => {
 
                 res.render(`video/videochat`, { user, calls, recv });
             })
-
         });
     });
 });
