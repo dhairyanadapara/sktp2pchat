@@ -6,7 +6,7 @@
     <div class="row text-center">
         <div class="col-md-12">
             <button id="startBtn" class="btn-success btn">Start</button>
-            <form id="newCall" method="POST">
+            <form id="newCall" method="POST" action="/video">
                 <input id="callToUsernameInput" type="text" name="receiver" placeholder="username to call" required/>
                 <input type="submit" value="call" id="callBtn" class="btn-success btn" />
             </form>
@@ -86,3 +86,33 @@
     </table>
 </div>
 <script src="js/client.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Listen to submit event on the <form> itself!
+        $('#newCall').submit(function (e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            var name = $("#callToUsernameInput").val();
+
+            $.ajax({
+                type: "POST",
+                url: 'https://192.168.0.102/video',
+                data: name,
+                success: function (data) {
+                    //alert('Success!');
+                   window.stop();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('error ' + textStatus + " " + errorThrown);
+                }
+            });
+
+            $.post("/video", {
+                name: name,
+            });
+        });
+    });
+</script>

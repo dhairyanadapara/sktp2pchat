@@ -60,7 +60,7 @@ app.use(function (req, res, next) {
     res.locals.user = req.user;
     next();
 });
-//app.use(methodOverride('_method'));
+app.use(methodOverride('_method'));
 
 // app.engine('ejs', ejsMate);
 // app.set('view engine', 'ejs');
@@ -229,6 +229,6 @@ function sendTo(connection, message) {
     connection.send(JSON.stringify(message));
 }
 
-server.listen(secret.port, '192.168.0.105' ,() => {
+server.listen(secret.port, '192.168.0.102' ,() => {
     console.log(`Server is UP`);
 });

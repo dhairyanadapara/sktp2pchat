@@ -6,6 +6,10 @@ let wss = require('../server');
 
 router.get('/video', (req, res, next) => {
 
+    if (!req.user) {
+        res.redirect('/login');
+    }
+
     let calls;
     User.findOne({ _id: req.user._id }, function (err, user) {
         if (err) return next(err);
@@ -23,7 +27,11 @@ router.get('/video', (req, res, next) => {
 });
 
 router.post('/video', function (req, res, next) {
-    console.log("Hello");
+
+    if (!req.user) {
+        res.redirect('/login');
+    }
+
     let caller, receive;
 
     User.findOne({ _id: req.user._id }, function (err, user) {
@@ -52,41 +60,33 @@ router.post('/video', function (req, res, next) {
     setTimeout(() => {
         vchat.save((err) => {
             if (err) return err;
-            res.status(200);
+            // res.status(200);
             return console.log("Added to database", vchat);
         });
     }, 3000);
 
     res.writeHead(200);
+    res.end();
 });
 
 router.patch('/endvideo', function (req, res) {
 
     let vchat = new VChat();
-
     let time = moment().format('HH:mm');
 
-    
-
-    VChat.findOne({cid : req.body.id}, function(err,call){
+    VChat.findOneAndUpdate({ cid: req.user._id }, function (err, call) {
         if (err) return (err);
-        console.log(cid);
+        console.log(call);
         call.endTime = time;
-        console.log(time);
-        save((err) => {
+
+        vchat.save((err) => {
             if (err) return err;
-        
+            console.log(time);
             return console.log("Added to database", vchat);
         });
-
-        res.redirect('/video');
     });
-    // User.findOne({name: req.data.name}, function (err, user) {
-    //     if (err) return next(err);
 
-    //     res.send({user:user});
-    // });
-    // console.log(req.conn.name);
+    res.redirect('/video');
 });
 
 module.exports = router;
