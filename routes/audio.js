@@ -1,9 +1,10 @@
 let router = require('express').Router();
 let moment = require('moment');
 let User = require('../models/user');
-let VChat = require('../models/chat');
+let AChat = require('../models/chat');
+let wss = require('../server');
 
-router.get('/video', (req, res, next) => {
+router.get('/audio', (req, res, next) => {
 
     if (!req.user) {
         res.redirect('/login');
@@ -12,19 +13,19 @@ router.get('/video', (req, res, next) => {
     let calls;
     User.findOne({ _id: req.user._id }, function (err, user) {
         if (err) return next(err);
-        VChat.find({ cid: req.user._id }, function (err, calls) {
+        AChat.find({ cid: req.user._id }, function (err, calls) {
             if (err) return next(err);
 
-            VChat.find({ rid: req.user._id }, function (err, recv) {
+            AChat.find({ rid: req.user._id }, function (err, recv) {
                 if (err) return next(err);
 
-                res.render(`video/videochat`, { user, calls, recv });
+                res.render(`audio/audiochat`, { user, calls, recv });
             })
         });
     });
 });
 
-router.post('/video', function (req, res, next) {
+router.post('/audio', function (req, res, next) {
 
     if (!req.user) {
         res.redirect('/login');
@@ -37,29 +38,29 @@ router.post('/video', function (req, res, next) {
 
         
         caller = user._id;
-        vchat.cname = user.profile.name;
-        vchat.cid = caller;
+        achat.cname = user.profile.name;
+        achat.cid = caller;
     });
 
     User.findOne({ 'profile.name': req.body.name }, function (err, user) {
         if (err) return next(err);
         console.log(user);
         receive = user._id;
-        vchat.rname = user.profile.name;
-        vchat.rid = receive;
+        achat.rname = user.profile.name;
+        achat.rid = receive;
     });
-    let vchat = new VChat();
+    let achat = new AChat();
 
-    vchat.type = 'video';
-    vchat.date = moment().format('l');
-    vchat.startTime = moment().format('HH:mm');
-    vchat.endTime = moment().format('HH:mm');
+    achat.type = 'audio';
+    achat.date = moment().format('l');
+    achat.startTime = moment().format('HH:mm');
+    achat.endTime = moment().format('HH:mm');
 
     setTimeout(() => {
-        vchat.save((err) => {
+        achat.save((err) => {
             if (err) return err;
             // res.status(200);
-            return console.log("Added to database", vchat);
+            return console.log("Added to database", achat);
         });
     }, 3000);
 
@@ -67,24 +68,24 @@ router.post('/video', function (req, res, next) {
     res.end();
 });
 
-router.patch('/endvideo', function (req, res) {
+router.patch('/endaudio', function (req, res) {
 
-    let vchat = new VChat();
+    let achat = new AChat();
     let time = moment().format('HH:mm');
 
-    VChat.findOneAndUpdate({ cid: req.user._id }, function (err, call) {
+    AChat.findOneAndUpdate({ cid: req.user._id }, function (err, call) {
         if (err) return (err);
         console.log(call);
         call.endTime = time;
 
-        vchat.save((err) => {
+        achat.save((err) => {
             if (err) return err;
             console.log(time);
-            return console.log("Added to database", vchat);
+            return console.log("Added to database", achat);
         });
     });
 
-    res.redirect('/video');
+    res.redirect('/audio');
 });
 
 module.exports = router;

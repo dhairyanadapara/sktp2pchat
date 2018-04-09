@@ -4,7 +4,7 @@ let User = require('../models/user');
 let passportConf = require('../config/passport');
 
 router.get('/login', (req, res) => {
-    if (req.user) return res.redirect('/signup');
+    if (req.user) return res.redirect('/dashboard');
 
     res.render('accounts/signin', {
         layout: 'login',

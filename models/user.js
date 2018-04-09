@@ -6,11 +6,7 @@ let UserSchema =new mongoose.Schema({
     password:String,
     profile:{
         name:{type:String, default:''},
-        picture:{type:String, default:''}
-    },
-    history:[{
-        date:Date
-    }]
+    }
 });
 
 UserSchema.pre('save',function(next){

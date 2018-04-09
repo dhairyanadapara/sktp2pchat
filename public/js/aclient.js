@@ -3,7 +3,7 @@ let name;
 let connectedUser;
 
 //connecting to our signaling server
-let conn = new WebSocket('wss://192.168.0.102');
+let conn = new WebSocket('wss://192.168.43.241');
 
 //user connected by req, res to server
 conn.onopen = function () {
@@ -21,9 +21,6 @@ conn.onmessage = function (msg) {
             handleLogin(data.success);
             handleContacts(data.users);                 //checks the login info
             break;
-        // case "contacts":
-        //     handleContacts(data.users);
-        //     break;
         //when somebody wants to call us
         case "offer":
             handleOffer(data.offer, data.name);                         //make offer to other user
@@ -67,15 +64,14 @@ let callBtn = document.querySelector('#callBtn');
 
 let hangUpBtn = document.querySelector('#hangUpBtn');
 
-let localVideo = document.querySelector('#localVideo');
-let remoteVideo = document.querySelector('#remoteVideo');
+let localAudio = document.querySelector('#localAudio');
+let remoteAudio = document.querySelector('#remoteAudio');
 
 let yourConn;
 let stream;
 
 // Login when the user clicks the button
 startBtn.addEventListener("click", function (event) {
-
     name = document.getElementById("name").innerHTML;
 
     if (name.length > 0) {
@@ -90,15 +86,15 @@ function handleLogin() {
 
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-    navigator.getUserMedia({video: true, audio: false}, function (myStream) {
+    navigator.getUserMedia({video: false, audio: true}, function (myStream) {
         stream = myStream;
 
         //displaying local video stream on the page
         try {
-            localVideo.srcObject = stream;
+            localAudio.srcObject = stream;
         }
         catch (e) {
-            localVideo.src = window.URL.createObjectURL(stream);
+            localAudio.src = window.URL.createObjectURL(stream);
         }
 
         //using Google public stun server
@@ -113,7 +109,7 @@ function handleLogin() {
 
         //when a remote user adds stream to the peer connection, we display it
         yourConn.onaddstream = function (e) {
-            remoteVideo.src = window.URL.createObjectURL(e.stream);
+            remoteAudio.src = window.URL.createObjectURL(e.stream);
         };
 
         // Setup ice handling
@@ -201,7 +197,7 @@ hangUpBtn.addEventListener("click", function () {
 
 function handleLeave() {
     connectedUser = null;
-    remoteVideo.src = null;
+    remoteAudio.src = null;
 
     yourConn.close();
     yourConn.onicecandidate = null;

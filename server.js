@@ -32,7 +32,7 @@ let secret = require('./config/secret');
 let User = require('./models/user');
 let VChat = require('./models/chat');
 const server = https.createServer(credentials, app);
-const wss = new WebSocket.Server({server});
+const wss = new WebSocket.Server({ server });
 
 
 mongoose.connect(secret.database, (err) => {
@@ -45,13 +45,13 @@ mongoose.connect(secret.database, (err) => {
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use((cookieParser()));
 app.use(session({
     resave: true,
     saveUninitialized: true,
     secret: secret.secret,
-    store: new MongoStore({url: secret.database, autoReconnect: true})
+    store: new MongoStore({ url: secret.database, autoReconnect: true })
 }));
 app.use(flash());
 app.use(passport.initialize());
@@ -67,16 +67,20 @@ app.use(methodOverride('_method'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-let data,conn,username;
+let data, conn, username;
 let mainRoutes = require('./routes/main');
 let userRoutes = require('./routes/user');
 let videoRoutes = require('./routes/video');
+let audioRoutes = require('./routes/audio');
+let textRoutes = require('./routes/text');
 
 app.use(mainRoutes);
 app.use(userRoutes);
 app.use(videoRoutes);
+app.use(audioRoutes);
+app.use(textRoutes);
 
-let users =new Array();                                             //all connected to the server users
+let users = new Array();                                             //all connected to the server users
 
 //when a user connects to our sever
 wss.on('connection', function (connection) {
@@ -105,7 +109,7 @@ wss.on('connection', function (connection) {
                     sendTo(connection, {
                         type: "login",
                         success: true,
-                        users:users
+                        users: users
                     });
                 } else {
                     //save user connection on the server
@@ -115,7 +119,7 @@ wss.on('connection', function (connection) {
                     sendTo(connection, {
                         type: "login",
                         success: true,
-                        users:users
+                        users: users
                     });
                 }
 
@@ -179,7 +183,7 @@ wss.on('connection', function (connection) {
                 if (conn != null) {
                     sendTo(conn, {
                         type: "leave",
-                        name:data.name
+                        name: data.name
                     });
                 }
 
@@ -211,7 +215,7 @@ wss.on('connection', function (connection) {
                 if (conn != null) {
                     sendTo(conn, {
                         type: "leave",
-                        name:data.name
+                        name: data.name
                     });
                 }
             }
@@ -229,6 +233,6 @@ function sendTo(connection, message) {
     connection.send(JSON.stringify(message));
 }
 
-server.listen(secret.port, '192.168.0.102' ,() => {
+server.listen(secret.port, '192.168.43.241', () => {
     console.log(`Server is UP`);
 });
